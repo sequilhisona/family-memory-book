@@ -1,141 +1,705 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Student Portal Login">
-    <title>Student Portal - Login</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Family & Friends Memory Book</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-cream: #faf6f0;
+      --paper: #fffdf9;
+      --ink: #2d2622;
+      --muted: #6e6259;
+      --accent: #d96b43;
+      --accent-dark: #b8522d;
+      --tape: rgba(235, 214, 178, 0.78);
+      --border: #e8dfd3;
+      --shadow: 0 10px 25px rgba(45, 38, 34, 0.08);
+      --shadow-hover: 0 18px 35px rgba(45, 38, 34, 0.14);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-cream);
+      background-image: radial-gradient(#dfd4c5 1px, transparent 1px);
+      background-size: 22px 22px;
+      color: var(--ink);
+      min-height: 100vh;
+      padding-bottom: 4rem;
+    }
+
+    header {
+      text-align: center;
+      padding: 3rem 1.25rem 1.75rem;
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #f3e6d6;
+      color: var(--accent-dark);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      margin-bottom: 0.85rem;
+    }
+
+    h1 {
+      font-family: 'Caveat', cursive;
+      font-size: clamp(2.6rem, 6vw, 4rem);
+      line-height: 1.05;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+      outline: none;
+      border-radius: 8px;
+      padding: 0.1rem 0.4rem;
+    }
+
+    h1:focus, .subtitle:focus {
+      background: rgba(255, 255, 255, 0.75);
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 560px;
+      margin: 0 auto;
+      outline: none;
+      border-radius: 6px;
+      padding: 0.2rem 0.4rem;
+    }
+
+    .controls {
+      max-width: 1120px;
+      margin: 0 auto 2rem;
+      padding: 0 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .tab-btn {
+      border: 1px solid var(--border);
+      background: var(--paper);
+      color: var(--muted);
+      padding: 0.55rem 1rem;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn:hover { border-color: var(--accent); color: var(--ink); }
+    .tab-btn.active {
+      background: var(--ink);
+      color: #fff;
+      border-color: var(--ink);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      align-items: center;
+    }
+
+    .search-box {
+      padding: 0.58rem 1rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--paper);
+      font-family: inherit;
+      font-size: 0.9rem;
+      color: var(--ink);
+      width: 210px;
+    }
+
+    .search-box:focus { outline: none; border-color: var(--accent); }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 0.62rem 1.2rem;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(217, 107, 67, 0.28);
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+
+    .btn-primary:hover { background: var(--accent-dark); transform: translateY(-1px); }
+
+    .gallery {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem 1.75rem;
+    }
+
+    .polaroid {
+      position: relative;
+      background: var(--paper);
+      padding: 0.95rem 0.95rem 1.35rem;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .polaroid:nth-child(odd) { transform: rotate(-1deg); }
+    .polaroid:nth-child(even) { transform: rotate(1deg); }
+    .polaroid:hover {
+      transform: translateY(-6px) rotate(0deg) scale(1.01);
+      box-shadow: var(--shadow-hover);
+      z-index: 2;
+    }
+
+    .tape {
+      position: absolute;
+      top: -11px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-2deg);
+      width: 92px;
+      height: 24px;
+      background: var(--tape);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      pointer-events: none;
+    }
+
+    .photo-wrap {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background: #efe7dc;
+      overflow: hidden;
+      border-radius: 2px;
+      margin-bottom: 0.9rem;
+    }
+
+    .photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .cat-tag {
+      background: #f5ece1;
+      color: var(--accent-dark);
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .card-title {
+      font-family: 'Caveat', cursive;
+      font-size: 1.65rem;
+      line-height: 1.15;
+      color: var(--ink);
+      margin-bottom: 0.35rem;
+    }
+
+    .card-story {
+      font-size: 0.86rem;
+      color: var(--muted);
+      line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 0.8rem;
+      flex-grow: 1;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px dashed var(--border);
+      padding-top: 0.6rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.05rem;
+      padding: 0.2rem 0.35rem;
+      border-radius: 6px;
+      transition: background 0.15s ease;
+    }
+
+    .icon-btn:hover { background: #f3ebe0; }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 3.5rem 1rem;
+      color: var(--muted);
+      background: var(--paper);
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+    }
+
+    /* Modals */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(28, 22, 19, 0.72);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 50;
+    }
+
+    .modal-backdrop.open { display: flex; }
+
+    .modal-card {
+      background: var(--paper);
+      border-radius: 14px;
+      max-width: 520px;
+      width: 100%;
+      padding: 1.6rem;
+      box-shadow: 0 24px 50px rgba(0,0,0,0.28);
+      max-height: 92vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.1rem;
+    }
+
+    .modal-header h2 {
+      font-family: 'Caveat', cursive;
+      font-size: 2rem;
+    }
+
+    .form-group { margin-bottom: 0.95rem; }
+    .form-group label {
+      display: block;
+      font-size: 0.83rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+      color: var(--ink);
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 0.62rem 0.8rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.92rem;
+      background: #fff;
+    }
+
+    .form-group textarea { resize: vertical; min-height: 82px; }
+
+    /* Lightbox */
+    .lightbox-card {
+      background: var(--paper);
+      border-radius: 14px;
+      max-width: 880px;
+      width: 100%;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+      position: relative;
+    }
+
+    @media (max-width: 720px) {
+      .lightbox-card { grid-template-columns: 1fr; max-height: 92vh; overflow-y: auto; }
+    }
+
+    .lightbox-img {
+      background: #1d1917;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 280px;
+      max-height: 75vh;
+    }
+
+    .lightbox-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .lightbox-body {
+      padding: 1.65rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .lightbox-title {
+      font-family: 'Caveat', cursive;
+      font-size: 2.2rem;
+      line-height: 1.1;
+      margin: 0.45rem 0;
+    }
+
+    .lightbox-story {
+      color: var(--ink);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-top: 0.85rem;
+      white-space: pre-line;
+    }
+
+    .lightbox-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+  </style>
 </head>
+<body>
 
-<body style="margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; font-family: Arial, Helvetica, sans-serif; background: linear-gradient(135deg, #eef4ff, #dce9ff); color: #333;">
+  <header>
+    <span class="badge">Digital Scrapbook</span>
+    <h1 id="albumTitle" contenteditable="true" spellcheck="false">Our Family & Friends Memory Book</h1>
+    <p id="albumSubtitle" class="subtitle" contenteditable="true" spellcheck="false">Favorite snapshots, laughter, and moments we never want to forget.</p>
+  </header>
 
-    <!-- Header -->
-    <header style="background: #0d47a1; color: white; padding: 18px 8%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 3px 10px rgba(0,0,0,0.15);">
+  <section class="controls">
+    <div class="tabs" id="categoryTabs">
+      <button class="tab-btn active" data-cat="All">All</button>
+      <button class="tab-btn" data-cat="Family">Family</button>
+      <button class="tab-btn" data-cat="Friends">Friends</button>
+      <button class="tab-btn" data-cat="Trips">Trips</button>
+      <button class="tab-btn" data-cat="Celebrations">Celebrations</button>
+      <button class="tab-btn" id="favFilterBtn" data-cat="Favorites">❤️ Favorites</button>
+    </div>
 
-        <h1 style="margin: 0; font-size: 26px; font-weight: 700;">
-            Student Portal
-        </h1>
+    <div class="actions">
+      <input type="text" id="searchInput" class="search-box" placeholder="Search memories..." />
+      <button class="btn-primary" id="openAddBtn">+ Add Memory</button>
+    </div>
+  </section>
 
-        <nav aria-label="Main navigation" style="display: flex; gap: 10px;">
+  <main class="gallery" id="gallery"></main>
 
-            <a href="index.html"
-               style="color: #0d47a1; background: white; text-decoration: none; padding: 10px 18px; border-radius: 6px; font-size: 14px; font-weight: bold;">
-                LOGIN
-            </a>
+  <!-- Add Memory Modal -->
+  <div class="modal-backdrop" id="addModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>Add a New Memory</h2>
+        <button class="icon-btn" id="closeAddBtn" aria-label="Close">✕</button>
+      </div>
+      <form id="memoryForm">
+        <div class="form-group">
+          <label>Title *</label>
+          <input type="text" id="mTitle" placeholder="e.g., Beach Sunset with Cousins" required />
+        </div>
+        <div class="form-group">
+          <label>Upload Photo from Device</label>
+          <input type="file" id="mFile" accept="image/*" />
+        </div>
+        <div class="form-group">
+          <label>Or Paste Image URL</label>
+          <input type="text" id="mUrl" placeholder="images/photo3.jpg or https://..." />
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="mCategory">
+            <option value="Family">Family</option>
+            <option value="Friends">Friends</option>
+            <option value="Trips">Trips</option>
+            <option value="Celebrations">Celebrations</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Date</label>
+          <input type="text" id="mDate" placeholder="e.g., November 2026" />
+        </div>
+        <div class="form-group">
+          <label>Location</label>
+          <input type="text" id="mLocation" placeholder="e.g., Negros Oriental" />
+        </div>
+        <div class="form-group">
+          <label>Story / Caption</label>
+          <textarea id="mStory" placeholder="Write the story behind this photo..."></textarea>
+        </div>
+        <button type="submit" class="btn-primary" style="width:100%;">Save to Scrapbook</button>
+      </form>
+    </div>
+  </div>
 
-            <a href="register.html"
-               style="color: white; text-decoration: none; padding: 10px 18px; border-radius: 6px; font-size: 14px; font-weight: bold;">
-                REGISTER
-            </a>
+  <!-- Lightbox Modal -->
+  <div class="modal-backdrop" id="lightboxModal">
+    <div class="lightbox-card">
+      <div class="lightbox-img">
+        <img id="lbImage" src="" alt="" />
+      </div>
+      <div class="lightbox-body">
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span class="cat-tag" id="lbCategory"></span>
+            <button class="icon-btn" id="closeLbBtn" aria-label="Close">✕</button>
+          </div>
+          <h2 class="lightbox-title" id="lbTitle"></h2>
+          <p style="font-size:0.84rem; color:var(--muted);" id="lbMeta"></p>
+          <p class="lightbox-story" id="lbStory"></p>
+        </div>
+        <div class="lightbox-nav">
+          <button class="tab-btn" id="prevLbBtn">← Previous</button>
+          <button class="tab-btn" id="nextLbBtn">Next →</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        </nav>
-    </header>
+  <script>
+    const initialMemories = [
+      {
+        id: 1,
+        title: "Sunday Family Gathering",
+        date: "November 2026",
+        location: "Negros Oriental",
+        category: "Family",
+        image: "images/family1.jpg",
+        story: "Spending quality time together at home.",
+        favorite: true
+      },
+      {
+        id: 2,
+        title: "Campus Hangout",
+        date: "November 2026",
+        location: "Dumaguete",
+        category: "Friends",
+        image: "images/friends1.jpg",
+        story: "Good laughs and break time between classes.",
+        favorite: false
+      }
+    ];
 
+    const STORAGE_KEY = 'sequil_memory_book_v2';
+    let memories = JSON.parse(localStorage.getItem(STORAGE_KEY)) || initialMemories;
+    let activeCategory = 'All';
+    let searchQuery = '';
+    let currentLightboxIndex = 0;
+    let filteredMemories = [];
 
-    <!-- Main Content -->
-    <main style="flex: 1; display: flex; justify-content: center; align-items: center; padding: 50px 20px;">
+    const gallery = document.getElementById('gallery');
+    const albumTitle = document.getElementById('albumTitle');
+    const albumSubtitle = document.getElementById('albumSubtitle');
 
-        <section aria-labelledby="login-heading" style="width: 100%; max-width: 430px;">
+    if (localStorage.getItem('album_title')) albumTitle.textContent = localStorage.getItem('album_title');
+    if (localStorage.getItem('album_subtitle')) albumSubtitle.textContent = localStorage.getItem('album_subtitle');
 
-            <form action="/login"
-                  method="post"
-                  style="background: white; padding: 35px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.12);">
+    albumTitle.addEventListener('blur', () => localStorage.setItem('album_title', albumTitle.textContent.trim()));
+    albumSubtitle.addEventListener('blur', () => localStorage.setItem('album_subtitle', albumSubtitle.textContent.trim()));
 
-                <h2 id="login-heading"
-                    style="text-align: center; color: #0d47a1; font-size: 30px; margin: 0 0 25px 0;">
-                    Welcome Back
-                </h2>
+    function saveMemories() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(memories));
+    }
 
-                <fieldset style="border: none; padding: 0; margin: 0;">
+    function renderGallery() {
+      filteredMemories = memories.filter(m => {
+        const matchesCat =
+          activeCategory === 'All' ||
+          (activeCategory === 'Favorites' && m.favorite) ||
+          m.category === activeCategory;
+        const q = searchQuery.toLowerCase();
+        const matchesSearch =
+          m.title.toLowerCase().includes(q) ||
+          m.story.toLowerCase().includes(q) ||
+          m.location.toLowerCase().includes(q);
+        return matchesCat && matchesSearch;
+      });
 
-                    <legend style="font-size: 14px; color: #666; margin-bottom: 8px;">
-                        Login details
-                    </legend>
+      if (filteredMemories.length === 0) {
+        gallery.innerHTML = `<div class="empty-state">No memories match your filter yet. Click <strong>+ Add Memory</strong> to add one!</div>`;
+        return;
+      }
 
-                    <p id="email"
-                       style="color: #777; font-size: 14px; line-height: 1.5; margin: 0 0 25px 0;">
-                        Please enter your email and password to log in.
-                    </p>
+      gallery.innerHTML = filteredMemories.map((m, idx) => `
+        <article class="polaroid" onclick="openLightbox(${idx})">
+          <div class="tape"></div>
+          <div class="photo-wrap">
+            <img src="${m.image}" alt="${m.title}" loading="lazy" />
+          </div>
+          <div class="card-meta">
+            <span class="cat-tag">${m.category}</span>
+            <span>${m.date || ''}</span>
+          </div>
+          <h3 class="card-title">${m.title}</h3>
+          <p class="card-story">${m.story || ''}</p>
+          <div class="card-footer">
+            <span>📍 ${m.location || 'Sweet Memory'}</span>
+            <div>
+              <button class="icon-btn" onclick="toggleFavorite(event, ${m.id})" title="Favorite">${m.favorite ? '❤️' : '🤍'}</button>
+              <button class="icon-btn" onclick="deleteMemory(event, ${m.id})" title="Delete">🗑️</button>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    }
 
+    function toggleFavorite(e, id) {
+      e.stopPropagation();
+      const item = memories.find(m => m.id === id);
+      if (item) {
+        item.favorite = !item.favorite;
+        saveMemories();
+        renderGallery();
+      }
+    }
 
-                    <!-- Email -->
-                    <p style="margin: 0 0 18px 0;">
+    function deleteMemory(e, id) {
+      e.stopPropagation();
+      if (confirm('Remove this memory from your view?')) {
+        memories = memories.filter(m => m.id !== id);
+        saveMemories();
+        renderGallery();
+      }
+    }
 
-                        <label for="login-email"
-                               style="display: block; font-size: 14px; font-weight: 600; color: #444; margin-bottom: 7px;">
-                            Email Address
-                        </label>
+    document.querySelectorAll('.tab-btn[data-cat]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn[data-cat]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeCategory = btn.dataset.cat;
+        renderGallery();
+      });
+    });
 
-                        <input type="email"
-                               id="login-email"
-                               name="email"
-                               autocomplete="email"
-                               placeholder="Enter your email"
-                               required
-                               style="width: 100%; padding: 13px 14px; border: 1px solid #d0d7e2; border-radius: 8px; font-size: 15px; outline: none; background: #fafcff; box-sizing: border-box;">
-                    </p>
+    document.getElementById('searchInput').addEventListener('input', e => {
+      searchQuery = e.target.value;
+      renderGallery();
+    });
 
+    // Add Memory Modal
+    const addModal = document.getElementById('addModal');
+    document.getElementById('openAddBtn').onclick = () => addModal.classList.add('open');
+    document.getElementById('closeAddBtn').onclick = () => addModal.classList.remove('open');
 
-                    <!-- Password -->
-                    <p style="margin: 0 0 18px 0;">
+    function resizeImage(file) {
+      return new Promise(resolve => {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const maxW = 1000;
+            const scale = Math.min(1, maxW / img.width);
+            canvas.width = img.width * scale;
+            canvas.height = img.height * scale;
+            canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+            resolve(canvas.toDataURL('image/jpeg', 0.82));
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
 
-                        <label for="login-password"
-                               style="display: block; font-size: 14px; font-weight: 600; color: #444; margin-bottom: 7px;">
-                            Password
-                        </label>
+    document.getElementById('memoryForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const file = document.getElementById('mFile').files[0];
+      let imageSrc = document.getElementById('mUrl').value.trim() || 'images/family1.jpg';
+      if (file) imageSrc = await resizeImage(file);
 
-                        <input type="password"
-                               id="login-password"
-                               name="password"
-                               autocomplete="current-password"
-                               placeholder="Enter your password"
-                               required
-                               style="width: 100%; padding: 13px 14px; border: 1px solid #d0d7e2; border-radius: 8px; font-size: 15px; outline: none; background: #fafcff; box-sizing: border-box;">
-                    </p>
+      memories.unshift({
+        id: Date.now(),
+        title: document.getElementById('mTitle').value.trim(),
+        category: document.getElementById('mCategory').value,
+        date: document.getElementById('mDate').value.trim(),
+        location: document.getElementById('mLocation').value.trim(),
+        story: document.getElementById('mStory').value.trim(),
+        image: imageSrc,
+        favorite: false
+      });
 
+      saveMemories();
+      renderGallery();
+      e.target.reset();
+      addModal.classList.remove('open');
+    });
 
-                    <!-- Remember Me -->
-                    <div style="display: flex; align-items: center; gap: 8px; margin: 5px 0 22px 0;">
+    // Lightbox
+    const lightboxModal = document.getElementById('lightboxModal');
+    function openLightbox(idx) {
+      currentLightboxIndex = idx;
+      updateLightbox();
+      lightboxModal.classList.add('open');
+    }
 
-                        <input type="checkbox"
-                               id="remember"
-                               name="remember"
-                               value="yes"
-                               style="width: 16px; height: 16px; cursor: pointer;">
+    function updateLightbox() {
+      const m = filteredMemories[currentLightboxIndex];
+      if (!m) return;
+      document.getElementById('lbImage').src = m.image;
+      document.getElementById('lbCategory').textContent = m.category;
+      document.getElementById('lbTitle').textContent = m.title;
+      document.getElementById('lbMeta').textContent = `${m.date || ''} ${m.location ? '• 📍 ' + m.location : ''}`;
+      document.getElementById('lbStory').textContent = m.story || '';
+    }
 
-                        <label for="remember"
-                               style="font-size: 14px; color: #444; cursor: pointer;">
-                            Remember me
-                        </label>
+    document.getElementById('closeLbBtn').onclick = () => lightboxModal.classList.remove('open');
+    document.getElementById('prevLbBtn').onclick = () => {
+      currentLightboxIndex = (currentLightboxIndex - 1 + filteredMemories.length) % filteredMemories.length;
+      updateLightbox();
+    };
+    document.getElementById('nextLbBtn').onclick = () => {
+      currentLightboxIndex = (currentLightboxIndex + 1) % filteredMemories.length;
+      updateLightbox();
+    };
 
-                    </div>
+    document.addEventListener('keydown', e => {
+      if (!lightboxModal.classList.contains('open')) return;
+      if (e.key === 'Escape') lightboxModal.classList.remove('open');
+      if (e.key === 'ArrowLeft') document.getElementById('prevLbBtn').click();
+      if (e.key === 'ArrowRight') document.getElementById('nextLbBtn').click();
+    });
 
-
-                    <!-- Login Button -->
-                    <button type="submit"
-                            style="width: 100%; padding: 13px; border: none; border-radius: 8px; background: #0d47a1; color: white; font-size: 16px; font-weight: bold; cursor: pointer;">
-                        Log In
-                    </button>
-
-                </fieldset>
-
-            </form>
-
-        </section>
-
-    </main>
-
-
-    <!-- Footer -->
-    <footer style="text-align: center; padding: 18px; background: #083b83; color: rgba(255,255,255,0.85); font-size: 13px;">
-
-        <p style="margin: 0;">
-            &copy; 2026 Student Portal. All rights reserved.
-        </p>
-
-    </footer>
-
+    renderGallery();
+  </script>
 </body>
 </html>
-```
