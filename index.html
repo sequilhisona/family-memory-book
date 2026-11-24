@@ -521,7 +521,7 @@
     ];
 
     const STORAGE_KEY = 'sequil_memory_book_v2';
-    let memories = JSON.parse(localStorage.getItem(STORAGE_KEY)) || initialMemories;
+    let memories = localStorage.getItem(STORAGE_KEY) !== null ? JSON.parse(localStorage.getItem(STORAGE_KEY)) : initialMemories;
     let activeCategory = 'All';
     let searchQuery = '';
     let currentLightboxIndex = 0;
