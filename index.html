@@ -440,7 +440,7 @@
         </div>
         <div class="form-group">
           <label>Upload Photo from Device</label>
-          <input type="file" id="mFile" accept="image/*" />
+          <input type="file" id="mFile" accept="image/*" multiple />
         </div>
         <div class="form-group">
           <label>Or Paste Image URL</label>
@@ -673,20 +673,34 @@
 
     document.getElementById('memoryForm').addEventListener('submit', async e => {
       e.preventDefault();
-      const file = document.getElementById('mFile').files[0];
-      let imageSrc = document.getElementById('mUrl').value.trim() || 'images/family1.jpg';
-      if (file) imageSrc = await resizeImage(file);
+      const files = Array.from(document.getElementById('mFile').files);
+      const baseTitle = document.getElementById('mTitle').value.trim();
+      const category = document.getElementById('mCategory').value;
+      const date = document.getElementById('mDate').value.trim();
+      const location = document.getElementById('mLocation').value.trim();
+      const story = document.getElementById('mStory').value.trim();
 
-      memories.unshift({
-        id: Date.now(),
-        title: document.getElementById('mTitle').value.trim(),
-        category: document.getElementById('mCategory').value,
-        date: document.getElementById('mDate').value.trim(),
-        location: document.getElementById('mLocation').value.trim(),
-        story: document.getElementById('mStory').value.trim(),
-        image: imageSrc,
-        favorite: false
-      });
+      if (files.length > 0) {
+        for (let i = 0; i < files.length; i++) {
+          const imageSrc = await resizeImage(files[i]);
+          memories.unshift({
+            id: Date.now() + i,
+            title: files.length > 1 ? `${baseTitle} (${i + 1})` : baseTitle,
+            category, date, location, story,
+            image: imageSrc,
+            favorite: false
+          });
+        }
+      } else {
+        const imageSrc = document.getElementById('mUrl').value.trim() || 'images/family1.jpg';
+        memories.unshift({
+          id: Date.now(),
+          title: baseTitle,
+          category, date, location, story,
+          image: imageSrc,
+          favorite: false
+        });
+      }
 
       saveMemories();
       renderGallery();
