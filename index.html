@@ -550,8 +550,34 @@
       }
     ];
 
-    const STORAGE_KEY = 'sequil_memory_book_v2';
-    let memories = localStorage.getItem(STORAGE_KEY) !== null ? JSON.parse(localStorage.getItem(STORAGE_KEY)) : initialMemories;
+    const DB_NAME = 'SequilMemoryBookDB';
+    const STORE_NAME = 'memories_store';
+    let memories = [...initialMemories];
+
+    function openDB() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, 1);
+        req.onupgradeneeded = e => e.target.result.createObjectStore(STORE_NAME);
+        req.onsuccess = e => resolve(e.target.result);
+        req.onerror = e => reject(e.target.error);
+      });
+    }
+
+    async function loadMemories() {
+      try {
+        const db = await openDB();
+        const tx = db.transaction(STORE_NAME, 'readonly');
+        const req = tx.objectStore(STORE_NAME).get('all_memories');
+        req.onsuccess = () => {
+          if (req.result !== undefined) {
+            memories = req.result;
+          }
+          renderGallery();
+        };
+      } catch (err) {
+        renderGallery();
+      }
+    }
     let activeCategory = 'All';
     let searchQuery = '';
     let currentLightboxIndex = 0;
@@ -567,8 +593,14 @@
     albumTitle.addEventListener('blur', () => localStorage.setItem('album_title', albumTitle.textContent.trim()));
     albumSubtitle.addEventListener('blur', () => localStorage.setItem('album_subtitle', albumSubtitle.textContent.trim()));
 
-    function saveMemories() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(memories));
+    async function saveMemories() {
+      try {
+        const db = await openDB();
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        tx.objectStore(STORE_NAME).put(memories, 'all_memories');
+      } catch (err) {
+        alert('Storage error: ' + err.message);
+      }
     }
 
     function renderGallery() {
@@ -658,12 +690,12 @@
           const img = new Image();
           img.onload = () => {
             const canvas = document.createElement('canvas');
-            const maxW = 1000;
+            const maxW = 800;
             const scale = Math.min(1, maxW / img.width);
             canvas.width = img.width * scale;
             canvas.height = img.height * scale;
             canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-            resolve(canvas.toDataURL('image/jpeg', 0.82));
+            resolve(canvas.toDataURL('image/jpeg', 0.75));
           };
           img.src = e.target.result;
         };
@@ -743,7 +775,7 @@
       if (e.key === 'ArrowRight') document.getElementById('nextLbBtn').click();
     });
 
-    renderGallery();
+    loadMemories();
   </script>
 </body>
 </html>
